@@ -7,7 +7,8 @@ use App\Entity\Language;
 use App\Domain\ParsedToken;
 use App\Utils\Connection;
 
-class JapaneseParser extends AbstractParser {
+class JapaneseParser extends AbstractParser
+{
 
     /** Checking MeCab **/
 
@@ -20,7 +21,7 @@ class JapaneseParser extends AbstractParser {
 
     public static function MeCab_command(string $args): string
     {
-        if (! JapaneseParser::MeCab_installed()) {
+        if (!JapaneseParser::MeCab_installed()) {
             $os = strtoupper(substr(PHP_OS, 0, 3));
             throw new \Exception("MeCab not installed or not on your PATH (OS = {$os})");
         }
@@ -39,7 +40,7 @@ class JapaneseParser extends AbstractParser {
         $os = strtoupper(substr(PHP_OS, 0, 3));
         if ($os == 'LIN' || $os == 'DAR') {
             if (shell_exec("command -v mecab"))
-                return 'mecab'; 
+                return 'mecab';
         }
         if ($os == 'WIN') {
             if (shell_exec('where /R "%ProgramFiles%\\MeCab\\bin" mecab.exe'))
@@ -53,7 +54,8 @@ class JapaneseParser extends AbstractParser {
     }
 
 
-    private function getMecabResult(string $text, string $args) {
+    private function getMecabResult(string $text, string $args)
+    {
         $file_name = tempnam(sys_get_temp_dir(), "lute");
         // We use the format "word num num" for all nodes
         $mecab_args = $args . ' -o ' . $file_name;
@@ -72,7 +74,8 @@ class JapaneseParser extends AbstractParser {
         return $mecabed;
     }
 
-    public function getParsedTokens(string $text, Language $lang) {
+    public function getParsedTokens(string $text, Language $lang)
+    {
         $text = trim(preg_replace('/[ \t]+/u', ' ', $text));
 
         $mecab_args = '-F %m\t%t\t%h\n -U %m\t%t\t%h\n -E EOP\t3\t7\n';
@@ -109,7 +112,8 @@ class JapaneseParser extends AbstractParser {
     /**
      * Get the reading in katakana using MeCab.
      */
-    public function getReading(string $text) {
+    public function getReading(string $text)
+    {
         // Ref https://stackoverflow.com/questions/5797505/php-regex-expression-involving-japanese
         // https://www.php.net/manual/en/function.mb-ereg-replace.php
         $r = mb_ereg_replace(

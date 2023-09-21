@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Domain\KoreanParser;
 use App\Repository\LanguageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -79,7 +80,8 @@ class Language
         $this->terms = new ArrayCollection();
     }
 
-    public function __toString(): string {
+    public function __toString(): string
+    {
         return $this->LgID . ': ' . $this->LgName;
     }
 
@@ -281,17 +283,19 @@ class Language
     public function getParser()
     {
         switch ($this->LgParserType) {
-        case 'spacedel':
-            return new SpaceDelimitedParser();
-        case 'classicalchinese':
-            return new ClassicalChineseParser();
-        case 'japanese':
-            return new JapaneseParser();
-        default:
-            throw new \Exception("Unknown parser type {$this->LgParserType} for {$this->getLgName()}");
+            case 'spacedel':
+                return new SpaceDelimitedParser();
+            case 'classicalchinese':
+                return new ClassicalChineseParser();
+            case 'japanese':
+                return new JapaneseParser();
+            case 'korean':
+                return new KoreanParser();
+            default:
+                throw new \Exception("Unknown parser type {$this->LgParserType} for {$this->getLgName()}");
         }
     }
-    
+
     public function parse($texts): void
     {
         $p = $this->getParser();
@@ -379,7 +383,25 @@ class Language
         return $japanese;
     }
 
-    public static function makeClassicalChinese() {
+    public static function makeKorean() {
+        if (!KoreanParser::MeCab_installed())
+            throw new \Exception("MeCab-Ko not installed.");
+        $korean = new Language();
+        $korean
+            ->setLgName('Korean')
+            ->setLgDict1URI('https://korean.dict.naver.com/koendict/#/search?query=###')
+            ->setLgDict2URI('https://www.bing.com/images/search?q=###&form=HDRSC2&first=1&tsc=ImageHoverTitle')
+            ->setLgGoogleTranslateURI('https://translate.google.com/?sl=ko&tl=en&text=###&op=translate')
+            ->setLgRegexpWordCharacters('가-힣ᄀ-ᇂ')
+            ->setLgRemoveSpaces(false)
+            ->setLgShowRomanization(false)
+            ->setLgRegexpSplitSentences('.!?:;。！？：；')
+            ->setLgParserType('korean');
+        return $korean;
+    }
+
+    public static function makeClassicalChinese()
+    {
         $lang = new Language();
         $lang
             ->setLgName('Classical Chinese')
@@ -406,6 +428,8 @@ class Language
 
         if (JapaneseParser::MeCab_installed())
             $ret[] = Language::makeJapanese();
+        if (KoreanParser::MeCab_installed())
+            $ret[] = Language::makeKorean();
         return $ret;
     }
 
