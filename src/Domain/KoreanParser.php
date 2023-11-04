@@ -76,7 +76,7 @@ class KoreanParser extends AbstractParser
   {
     $text = trim(preg_replace('/[ \t]+/u', ' ', $text));
 
-    $mecab_args = '-F %m\t%t\t%h\n -U %m\t%t\t%h\n -E EOP\t3\t7\n';
+    $mecab_args = '-d /opt/mecab/share/mecab-ko-dic -F %m\t%t\t%h\n -U %m\t%t\t%h\n -E EOP\t3\t7\n';
     $mecabed = $this->getMecabResult($text, $mecab_args);
 
     $tokens = [];
@@ -110,23 +110,23 @@ class KoreanParser extends AbstractParser
   /**
    * Get the reading in katakana using MeCab.
    */
-  public function getReading(string $text)
-  {
-    // Ref https://stackoverflow.com/questions/5797505/php-regex-expression-involving-japanese
-    // https://www.php.net/manual/en/function.mb-ereg-replace.php
-    $r = mb_ereg_replace(
-      '^[\p{Hiragana}]+$',
-      '',
-      trim($text)
-    );
-    if ($r == '')
-      return null;
+  //   public function getReading(string $text)
+//   {
+//     // Ref https://stackoverflow.com/questions/5797505/php-regex-expression-involving-japanese
+//     // https://www.php.net/manual/en/function.mb-ereg-replace.php
+//     $r = mb_ereg_replace(
+//       '^[\p{Hiragana}]+$',
+//       '',
+//       trim($text)
+//     );
+//     if ($r == '')
+//       return null;
 
-    $mecabed = $this->getMecabResult($text, '-O yomi');
-    $mecabed = rtrim($mecabed, "\n");
-    if ($mecabed == $text)
-      return null;
-    return $mecabed;
-  }
+  //     $mecabed = $this->getMecabResult($text, '-O yomi');
+//     $mecabed = rtrim($mecabed, "\n");
+//     if ($mecabed == $text)
+//       return null;
+//     return $mecabed;
+//   }
 
 }

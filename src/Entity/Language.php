@@ -393,7 +393,6 @@ class Language
             ->setLgDict2URI('https://www.bing.com/images/search?q=###&form=HDRSC2&first=1&tsc=ImageHoverTitle')
             ->setLgGoogleTranslateURI('https://translate.google.com/?sl=ko&tl=en&text=###&op=translate')
             ->setLgRegexpWordCharacters('가-힣ᄀ-ᇂ')
-            ->setLgRemoveSpaces(false)
             ->setLgShowRomanization(false)
             ->setLgRegexpSplitSentences('.!?:;。！？：；')
             ->setLgParserType('korean');

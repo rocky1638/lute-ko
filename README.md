@@ -3,6 +3,24 @@
 [![CI master](https://github.com/jzohrab/lute/actions/workflows/symfony-ci.yml/badge.svg?branch=master)](https://github.com/jzohrab/lute/actions/workflows/symfony-ci.yml?query=branch%3Amaster)
 [![Discord Server](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/CzFUQP5m8u)
 
+## 🚧 Korean Support Fork 🚧
+
+This is a fork of LUTE that aims to add support for learning and parsing Korean.
+
+Additions:
+
+* Dockerized implementation of Korean langage parsing using `mecab-ko`, which is a fork of `mecab` _(which is used for Japanese currently)._
+* When parsing Korean texts, the individual parts of speech are, anecdotally, correctly tokenized about 95-99% of the time.
+
+Limitations/Bugs:
+
+* When pasting in a new Korean text, the spaces are removed when viewing through the main learning mode. However, attempting to edit the text reveals that the original spaces are preserved but just not displayed.
+* When trying to create multi-token terms, sometimes the multi-token term is saved, but still displays as a blue highlight in reading view.
+* There is currently no support for other installation methods, as the code currently depends on the file path location of `mecab-ko` within the Linux Docker container.
+* The `getReading` function is commented out for `KoreanParser` because I wasn't sure if it was needed or could just be deleted.
+
+---
+
 This is a fork and ground-up rewrite of Learning with Texts, for learning foreign languages through reading.  You install Lute on your computer, import texts, and annotate terms.
 
 Lute contains the core features you need for learning through reading:
@@ -21,8 +39,6 @@ I have been using Lute for learning Spanish, it's a super tool.
 ## Demo
 
 A _very_ brief demo, showing the core feature: reading a doc, and creating a term:
-
-[comment]: # (See docs/adding_readme_gif.md for notes)
 
 ![A wee demo](https://user-images.githubusercontent.com/1637133/210660839-b9aebebc-60c6-43fc-9f6d-daf2c448f825.gif)
 
